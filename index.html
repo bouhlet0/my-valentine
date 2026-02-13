@@ -54,31 +54,28 @@
     }
 
     .heart-bg {
-        position: absolute;
-        font-size: 20px;
-        color: rgba(255, 182, 193, 0.3);
-        animation: floatHeart 15s infinite ease-in-out;
-        z-index: 0;
+    position: absolute;
+    bottom: -50px; /* Start below the screen */
+    color: rgba(255, 182, 193, 0.4);
+    animation: floatHeart 15s infinite linear;
+    z-index: 0;
+    pointer-events: none; /* Make sure they don't block button clicks! */
+    user-select: none;
     }
 
     @keyframes floatHeart {
-
-        0%,
-        100% {
-            transform: translateY(100vh) rotate(0deg);
+        0% {
+            transform: translateY(0) rotate(0deg);
             opacity: 0;
         }
-
         10% {
-            opacity: 0.6;
+            opacity: 0.7;
         }
-
         90% {
-            opacity: 0.6;
+            opacity: 0.7;
         }
-
         100% {
-            transform: translateY(-100px) rotate(360deg);
+            transform: translateY(-110vh) rotate(360deg);
             opacity: 0;
         }
     }
@@ -562,7 +559,7 @@
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.animationDelay = Math.random() * 3 + 's';
+        confetti.style.animationDelay = Math.random() * 5 + 's';
         confetti.style.background = ['#ff6b9d', '#ff4757', '#ffa502', '#ff6348', '#ff7675'][Math.floor(Math.random() * 5)];
         document.body.appendChild(confetti);
 
@@ -588,16 +585,37 @@
     }
 
     // Heart background animation
-    setInterval(() => {
-        const heart = document.createElement('div');
-        heart.className = 'heart-bg';
-        heart.textContent = ['💕', '💖', '💗', '💝'][Math.floor(Math.random() * 4)];
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.animationDelay = '0s';
-        document.body.appendChild(heart);
 
-        setTimeout(() => heart.remove(), 15000);
-    }, 3000);
+    // Function to spawn a single heart
+function spawnHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart-bg';
+    heart.textContent = ['💕', '💖', '💗', '💝', '♥', '❤','❣','💞','💓','💗','💘'][Math.floor(Math.random() * 11)];
+    heart.style.left = Math.random() * 100 + '%';
+    
+    // Randomize size for depth
+    const size = 15 + Math.random() * 20; 
+    heart.style.fontSize = size + 'px';
+    
+    // Randomize duration so they don't all move at the same speed
+    const duration = 10 + Math.random() * 10;
+    heart.style.animationDuration = duration + 's';
+    
+    heart.style.animationDelay = '0s';
+    document.body.appendChild(heart);
+
+    // Remove after animation finishes to keep the browser fast
+    setTimeout(() => heart.remove(), duration * 1500);
+}
+
+// 1. Create 15 hearts immediately when the page loads
+for(let i = 0; i < 15; i++) {
+    setTimeout(spawnHeart, Math.random() * 2000);
+}
+
+// 2. Spawn a new heart every 400ms (much faster than 3000ms!)
+setInterval(spawnHeart, 400);
+
 </script>
 </body>
 
